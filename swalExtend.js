@@ -41,14 +41,42 @@
 
         params.swalFunction.apply(this, params.swalFunctionParams);
 
+        var clearFunction = function() {
+          container.classList.remove('row');
+          if (params.width) {
+            document.querySelector('.sweet-alert').style.width = '';
+          }
+
+          var clearClassList = function(cl) {
+            while(cl.length > 0) {
+              cl.remove(cl[0]);
+            }
+          }
+          var items = container.querySelectorAll('.sa-confirm-button-container');
+          for(var i = 0; i < items.length; i++) {
+            clearClassList(items[i].classList);
+            items[i].classList.add('sa-confirm-button-container');
+          }
+
+          var cancelButton = container.querySelector('.cancel');
+          clearClassList(cancelButton.classList);
+          cancelButton.classList.add('cancel');
+        };
+
         $(".confirm").on('click', function(){
           $(".swalExtendButton").hide();
-        })
+        });
 
+        $('.confirm, .cancel').on('click', clearFunction);
+
+        var container = document.querySelector(".sa-button-container");
         if(params.hasCancelButton){
-          var container = document.querySelector(".sa-button-container");
           var cancel = document.querySelector(".cancel");
           var c = container.removeChild(cancel);
+        }
+
+        if (params.rowButtons) {
+          container.classList.add('row');
         }
 
         for(var i=0;i<params.buttonNum; i++){
@@ -75,6 +103,8 @@
               else {
                 div.style.backgroundColor = params.buttonColor ? params.buttonColor : "#DD6B55";
               }
+
+              div.addEventListener("click", clearFunction);
             }
 
             if(params.clickFunctionList[i]){
@@ -93,11 +123,38 @@
               })
             }
         }
+       
        if(params.hasCancelButton){
           container.appendChild(c);
         }
       };
+
+      var extendButtons = container.querySelectorAll('.swalExtendButton');
+      for(var i = 0; i < extendButtons.length; i++) {
+        extendButtons[i].innerHTML = params.buttonNames[i] || extendButtons[i].innerHTML;
+      }
+
+      if (params.rowButtons){
+        for(var i = 0; i < extendButtons.length; i++) {
+          extendButtons[i].parentNode.classList.add(params.rowButtons.buttons[i]);
+        }
+
+        var confirmButton = container.querySelector('.confirm');
+        if (confirmButton) {
+          confirmButton.parentNode.classList.add(params.rowButtons.confirm);
+        }
+
+        var cancelButton = container.querySelector('.cancel');
+        if (cancelButton) {
+          cancelButton.classList.add(params.rowButtons.cancel);
+        }
+      }
+
       params.swalFunction.apply(this, params.swalFunctionParams);
       $(".swalExtendButton").show();
+
+      if (params.width) {
+        document.querySelector('.sweet-alert').style.width = params.width;
+      }
     };
 

@@ -60,3 +60,14 @@
   border: 0
 }
 
+.sweet-alert .row, 
+.sweet-alert .row .sa-confirm-button-container,
+.sweet-alert .row .cancel {
+  padding-left: 0px;
+  padding-right: 0px;
+}
+
+.sweet-alert .row .cancel {
+  margin-right: 0px;
+  margin-left: 0px;
+}
